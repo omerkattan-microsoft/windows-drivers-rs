@@ -8,7 +8,7 @@ use std::{
 
 use bindgen::CodegenConfig;
 use tracing_subscriber::{filter::LevelFilter, EnvFilter};
-use wdk_build::{BuilderExt, Config, ConfigError, DriverConfig, KMDFConfig};
+use wdk_build::{BuilderExt, Config, ConfigError, DriverConfig, UMDFConfig};
 
 // FIXME: feature gate the WDF version
 // FIXME: check that the features are exclusive
@@ -33,6 +33,7 @@ fn generate_types(out_path: &Path, config: Config) -> Result<(), ConfigError> {
     Ok(
         bindgen::Builder::wdk_default(vec!["src/ntddk-input.h", "src/wdf-input.h"], config)?
             .with_codegen_config(CodegenConfig::TYPES)
+            .blocklist_type(".*IMAGE_TLS_DIRECTORY.*")
             .generate()
             .expect("Bindings should succeed to generate")
             .write_to_file(out_path.join("types.rs"))?,
@@ -115,7 +116,7 @@ fn main() -> anyhow::Result<()> {
 
     let config = Config {
         // FIXME: this should be based off of Cargo feature version
-        driver_config: DriverConfig::KMDF(KMDFConfig::new()),
+        driver_config: DriverConfig::UMDF(UMDFConfig::new()),
         ..Config::default()
     };
 

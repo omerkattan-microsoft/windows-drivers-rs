@@ -1,8 +1,9 @@
 /* Copyright (c) Microsoft Corporation
    License: MIT OR Apache-2.0 */
 
-#include "ntifs.h"
-#include "ntddk.h"
+//#include "ntifs.h"
+//#include "Windows.h"
+//#include "ntddk.h"
 
 // FIXME: Why is there no definition for this struct? Maybe blocklist this struct in bindgen. 
 typedef union _KGDTENTRY64
