@@ -324,18 +324,6 @@ impl Config {
         let sdk_version = utils::get_latest_windows_sdk_version(include_directory.as_path())?;
         let windows_sdk_include_path = include_directory.join(sdk_version);
 
-        let crt_include_path = windows_sdk_include_path.join("km/crt");
-        if !crt_include_path.is_dir() {
-            return Err(ConfigError::DirectoryNotFound {
-                directory: crt_include_path.to_string_lossy().into(),
-            });
-        }
-        include_paths.push(
-            crt_include_path
-                .canonicalize()?
-                .strip_extended_length_path_prefix()?,
-        );
-
         let km_or_um_include_path = windows_sdk_include_path.join(match self.driver_config {
             DriverConfig::WDM() | DriverConfig::KMDF(_) => "km",
             DriverConfig::UMDF(_) => "um",
